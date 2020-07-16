@@ -1,0 +1,243 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: retrogaming;
+    src: url(../fonts/retrogaming.ttf);
+}
+
+#pokedex {
+    display: block;
+    height: 700px;
+    width: 1200px;
+    font-family: retrogaming;
+}
+
+.pokedex-left, .pokedex-right {
+    display: inline-block;
+    background-color: crimson;
+    border-radius: 30px;
+    height: 700px;
+    width: 600px;
+    border: 1px solid #ffffff;
+}
+
+.state-icons {
+    width: 500px;
+}
+
+#blue-state-icon {
+    height: 60px;
+    width: 60px;
+    border: 5px solid #ffffff;
+    border-radius: 50px;
+    background-color: #63C3D1;
+    margin: 25px 0 25px 25px;
+}
+
+.flickerBlue {
+    animation-name: flickerBlue;
+    animation-duration: 1s;
+    animation-iteration-count: 3;
+}
+
+@keyframes flickerBlue {
+    0% {
+        background-color: #63C3D1;
+    }
+    25% {
+        background-color: #00ffff
+    }
+    50% {
+        background-color: #63C3D1;
+    }
+    75% {
+        background-color: #00ffff;
+    }
+    100% {
+        background-color: #63C3D1;
+    }
+}
+
+#red-state-icon, #yellow-state-icon, #green-state-icon {
+    height: 25px;
+    width: 25px;
+    margin: 25px 15px;
+    border-radius: 20px;
+}
+
+#red-state-icon {
+    background-color: #ff0000;
+}
+
+.flickerRed {
+    animation-name: flickerRed;
+    animation-duration: 1s;
+    animation-iteration-count: 3;
+    animation-delay: 0.1s;
+}
+
+@keyframes flickerRed {
+    0% {
+        background-color: #8b0000;
+    }
+    25% {
+        background-color: #ff0000;
+    }
+    50% {
+        background-color: #8b0000;
+    }
+    75% {
+        background-color: #ff0000;
+    }
+    100% {
+        background-color: #8b0000;
+    }
+}
+
+#yellow-state-icon {
+    background-color: #ffd700;
+}
+
+.flickerYellow {
+    animation-name: flickerYellow;
+    animation-duration: 1s;
+    animation-iteration-count: 3;
+    animation-delay: 0.2s;
+}
+
+@keyframes flickerYellow {
+    0% {
+        background-color: #daa520;
+    }
+    25% {
+        background-color: #ffff00
+    }
+    50% {
+        background-color: #daa520;
+    }
+    75% {
+        background-color: #ffff00;
+    }
+    100% {
+        background-color: #daa520;
+    }
+}
+
+#green-state-icon {
+    background-color: #7fff00;
+}
+
+.flickerGreen {
+    animation-name: flickerGreen;
+    animation-duration: 1s;
+    animation-iteration-count: 3;
+    animation-delay: 0.3s;
+}
+
+@keyframes flickerGreen {
+    0% {
+        background-color: #008000;
+    }
+    25% {
+        background-color: #7fff00;
+    }
+    50% {
+        background-color: #008000;
+    }
+    75% {
+        background-color: #7fff00;
+    }
+    100% {
+        background-color: #008000;
+    }
+}
+
+.left-screen-border {
+    display: block;
+    background-color: lightgray;
+    border-radius: 20px;
+    height: 400px;
+    width: 500px;
+    margin: 0 auto;
+    padding: 25px 0;
+}
+
+.left-inner-screen {
+    display: flex;
+    align-items: center;
+    background-color: aquamarine;
+    border-radius: 15px;
+    height: 300px;
+    width: 450px;
+    margin: 0 auto;
+}
+
+.left-inner-screen img {
+    width: 200px;
+    height: auto;
+}
+
+.searchBar {
+    width: 500px;
+    height: 50px;
+}
+
+#search-input {
+    border-radius: 10px 0px 0px 10px;
+    border: none;
+    height: 50px;
+    width: 310px;
+}
+
+#searchPokemon {
+    border-radius: 0px 10px 10px 0px;
+    border: none;
+    background-color: #efefef;
+    height: 50px;
+    width: 190px;
+}
+
+#right-inner-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: aquamarine;
+    border-radius: 15px;
+    height: 300px;
+    width: 500px;
+    margin: 40px auto 0;
+}
+
+.buttons {
+    margin-top: 35px;
+    width: 500px;
+    height: 300px;
+}
+
+.pokedex-btn {
+    height: 50px;
+    width: 242px;
+    line-height: 2.3;
+    background-color: #efefef;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+}
+
+#searchPokemon:hover, .pokedex-btn:hover {
+    background-color: #a9a9a9;
+    color: #ffffff;
+}
+
+.pokedex-btn:nth-child(odd) {
+    margin-right: 15px;
+}
+
+#info-btn, #moves-btn {
+    margin-bottom: 15px;
+}
