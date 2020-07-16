@@ -37,8 +37,8 @@ error_reporting(E_ALL);
                         <?php
                             if(!empty ($_GET['search-input'])){
                                 sleep(1);
-                                $getpokeimg = file_get_contents('https://pokeapi.co/api/v2/pokemon/' . strtolower($_GET['search-input']));
-                                $data = json_decode($getpokeimg, true);
+                                $getPokeImg = file_get_contents('https://pokeapi.co/api/v2/pokemon/' . strtolower($_GET['search-input']));
+                                $data = json_decode($getPokeImg, true);
                                 $pokemonImg = $data['sprites']['front_default'];
                                 echo '<img src="'.$pokemonImg.'" class="mx-auto">';
                             }
@@ -47,33 +47,33 @@ error_reporting(E_ALL);
                 </div>
             </div>
             <div class="input-group mt-5 mx-auto searchBar">
-                <!-- <div> -->
                     <form action="" method="get" class="input-group-append">
                         <input type="text" name="search-input" id="search-input" class="px-3" placeholder="Pokémon name or ID"
                                aria-label="Pokémon name or ID" aria-describedby="basic-addon2">
-                        <input type="submit" class="btn" id="searchPokemon" value="Search Pokémon" onclick="flickerAnimations()">
+                        <input type="submit" name="search-btn" class="btn" id="searchPokemon" value="Search Pokémon" onclick="flickerAnimations()">
                     </form>
-                <!-- </div> -->
             </div>
         </div>
         <div class="pokedex-right col-md-6">
             <div id="right-inner-screen">
                 <?php
                 if(!empty ($_GET['search-input'])){
-                    $getpokemon = file_get_contents('https://pokeapi.co/api/v2/pokemon/' . strtolower($_GET['search-input']));
-                    $data = json_decode($getpokemon, true);
-                    $pokemonName = $data['name'];
-                    $printPokeName = '<h1 id="pokeName" class="text-center">Name: '.ucfirst($pokemonName).'</h1>';
-                    echo $printPokeName;
-                    $pokemonId = $data['id'];
-                    $printPokeId = '<h2 id="pokeId" class="text-center">ID: #'.ucfirst(strval($pokemonId)).'</h2>';
-                    echo $printPokeId;
-                    $getPokeTypes = $data['types'];
-                    $pokeTypesArr = [];
-                    foreach($getPokeTypes AS $key => $pokeType){
-                        array_push($pokeTypesArr, $pokeType['type']['name']);
+                    if(isset ($_POST['search-btn'])) {
+                        $getPokemon = file_get_contents('https://pokeapi.co/api/v2/pokemon/' . strtolower($_GET['search-input']));
+                        $data = json_decode($getPokemon, true);
+                        $pokemonName = $data['name'];
+                        $printPokeName = '<h1 id="pokeName" class="text-center">Name: ' . ucfirst($pokemonName) . '</h1>';
+                        echo $printPokeName;
+                        $pokemonId = $data['id'];
+                        $printPokeId = '<h2 id="pokeId" class="text-center">ID: #' . ucfirst(strval($pokemonId)) . '</h2>';
+                        echo $printPokeId;
+                        $getPokeTypes = $data['types'];
+                        $pokeTypesArr = [];
+                        foreach ($getPokeTypes as $key => $pokeType) {
+                            array_push($pokeTypesArr, $pokeType['type']['name']);
+                        }
+                        echo '<h3 id="pokeTypes" class="text-center">Type: ' . implode(", ", $pokeTypesArr) . '</h3>';
                     }
-                    echo '<h3 id="pokeTypes" class="text-center">Type: '.implode(", ", $pokeTypesArr).'</h3>';
                 }
                 if(isset ($_POST['moves-btn'])){
                     $getPokemonMoves = $data['moves'];
@@ -82,19 +82,15 @@ error_reporting(E_ALL);
                     foreach($pokeMovesArrSliced AS $key => $pokeMove){
                         array_push($pokeMovesArr, $pokeMove['move']['name']);
                     }
-                    /* $html = preg_replace('#<h1 id="pokeName" class="text-center">(.*?)</h1>#', '', $printPokeName);
-                    echo $html; */
                     echo '<h2 id="pokeMoves" class="text-center">Moves:</h2>';
                     echo '<p id="pokeMoves">'.implode(", ", $pokeMovesArr).'</p>';
                 }
                 if (isset ($_POST['prev-evol-btn'])) {
                     $getEvolution = file_get_contents('https://pokeapi.co/api/v2/pokemon-species/' . strtolower($_GET['search-input']));
                     $data = json_decode($getEvolution, true);
-                    //var_dump($data);
                     $getEvolChainUrl = $data['evolution_chain']['url'];
                     $getEvolutionChainData = file_get_contents($getEvolChainUrl);
                     $evolutionChainData = json_decode($getEvolutionChainData, true);
-                    //var_dump($evolutionChainData);
                     $evolChain = $evolutionChainData['chain'];
                     $evolvesTo = $evolChain['evolves_to'];
                     if (empty($evolvesTo)) {
@@ -102,20 +98,68 @@ error_reporting(E_ALL);
                     }
                     else if(count($evolvesTo) == 1){
                         if($evolChain['species']['name'] === strtolower($_GET['search-input'])){
-                            echo "this is the starter pokemon of this breed";
+                            echo ucfirst($_GET['search-input'])." is the starter pokemon of this breed.";
                         }
                         else if($evolvesTo['0']['species']['name'] === strtolower($_GET['search-input'])){
-                            echo "this is the first evolution of this breed";
+                            echo ucfirst($_GET['search-input'])." is the evolution of:";
+                            $getPrevEvolName = $evolChain['species']['name'];
+                            $getPokeImg = file_get_contents('https://pokeapi.co/api/v2/pokemon/'.$getPrevEvolName);
+                            $data = json_decode($getPokeImg, true);
+                            $pokemonImg = $data['sprites']['front_default'];
+                            echo '<img src="'.$pokemonImg.'" class="mx-auto">';
+                            echo '<p>Name: '.ucfirst($getPrevEvolName).'</p>';
+                            $pokemonId = $data['id'];
+                            echo $printPokeId = '<p id="pokeId" class="text-center">ID: #'.ucfirst(strval($pokemonId)).'</p>';
                         }
                         else if($evolvesTo['0']['evolves_to']['0']['species']['name'] === strtolower($_GET['search-input'])){
-                            echo "this is the second evolution of this breed";
+                            echo ucfirst($_GET['search-input'])." is the evolution of:";
+                            $getPrevEvolName = $evolvesTo['0']['species']['name'];
+                            $getPokeImg = file_get_contents('https://pokeapi.co/api/v2/pokemon/'.$getPrevEvolName);
+                            $data = json_decode($getPokeImg, true);
+                            $pokemonImg = $data['sprites']['front_default'];
+                            echo '<img src="'.$pokemonImg.'" class="mx-auto">';
+                            echo '<p>Name: '.ucfirst($getPrevEvolName).'</p>';
+                            $pokemonId = $data['id'];
+                            echo $printPokeId = '<p id="pokeId" class="text-center">ID: #'.ucfirst(strval($pokemonId)).'</p>';
                         }
                     }
                     else if(count($evolvesTo) > 1){
                         echo "there are multiple evolutions possible";
                     }
-
-                    //var_dump($evolvesTo);
+                }
+                if (isset ($_POST['next-evol-btn'])) {
+                    $getEvolution = file_get_contents('https://pokeapi.co/api/v2/pokemon-species/' . strtolower($_GET['search-input']));
+                    $data = json_decode($getEvolution, true);
+                    $getEvolChainUrl = $data['evolution_chain']['url'];
+                    $getEvolutionChainData = file_get_contents($getEvolChainUrl);
+                    $evolutionChainData = json_decode($getEvolutionChainData, true);
+                    $evolChain = $evolutionChainData['chain'];
+                    $evolvesTo = $evolChain['evolves_to'];
+                    if (empty($evolvesTo)) {
+                        echo ucfirst($_GET['search-input'])."has no evolution.";
+                    }
+                    else if(count($evolvesTo) == 1){
+                        if($evolChain['species']['name'] === strtolower($_GET['search-input'])){
+                            echo ucfirst($_GET['search-input'])." is the starter pokemon of this breed.";
+                        }
+                        else if($evolvesTo['0']['species']['name'] === strtolower($_GET['search-input'])){
+                            echo ucfirst($_GET['search-input'])." can evolve into:";
+                            $getNextEvolName = $evolvesTo['0']['evolves_to']['0']['species']['name'];
+                            $getPokeImg = file_get_contents('https://pokeapi.co/api/v2/pokemon/'.$getNextEvolName);
+                            $data = json_decode($getPokeImg, true);
+                            $pokemonImg = $data['sprites']['front_default'];
+                            echo '<img src="'.$pokemonImg.'" class="mx-auto">';
+                            echo '<p>Name: '.ucfirst($getNextEvolName).'</p>';
+                            $pokemonId = $data['id'];
+                            echo $printPokeId = '<p id="pokeId" class="text-center">ID: #'.ucfirst(strval($pokemonId)).'</p>';
+                        }
+                        else if($evolvesTo['0']['evolves_to']['0']['species']['name'] === strtolower($_GET['search-input'])){
+                            echo ucfirst($_GET['search-input'])." has no evolution.";
+                        }
+                    }
+                    else if(count($evolvesTo) > 1){
+                        echo "there are multiple evolutions possible";
+                    }
                 }
                 ?>
             </div>
@@ -124,8 +168,8 @@ error_reporting(E_ALL);
                 <div class="row">
                         <input type="submit" id="info-btn" class="btn pokedex-btn" value="More info" onclick="flickerAnimations()">
                         <input type="submit" name="moves-btn" id="moves-btn" class="btn pokedex-btn" value="Moves" onclick="flickerAnimations()">
-                        <input type="submit" name="prev-evol-btn" id="prev-evol-btn" class="btn pokedex-btn" value="Previous evolutions" onclick="flickerAnimations()">
-                        <input type="submit" name="prev-evol-btn" id="next-evol-btn" class="btn pokedex-btn" value="Next evolutions" onclick="flickerAnimations()">
+                        <input type="submit" name="prev-evol-btn" id="prev-evol-btn" class="btn pokedex-btn" value="Previous evolution" onclick="flickerAnimations()">
+                        <input type="submit" name="next-evol-btn" id="next-evol-btn" class="btn pokedex-btn" value="Next evolution" onclick="flickerAnimations()">
                 </div>
             </section>
             </form>

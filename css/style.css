@@ -181,6 +181,11 @@
     height: auto;
 }
 
+#right-inner-screen img {
+    width: 150px;
+    height: auto;
+}
+
 .searchBar {
     width: 500px;
     height: 50px;
